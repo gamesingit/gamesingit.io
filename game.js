@@ -153,6 +153,7 @@
 
     floodFill(x, y);
     checkWin();
+    renderCursor();
   }
 
   function floodFill(x, y) {
@@ -181,6 +182,7 @@
     c.el.textContent = c.flagged ? '🚩' : '';
     flagsPlaced += c.flagged ? 1 : -1;
     updateMineCount();
+    renderCursor();
   }
 
   function chord(x, y) {
@@ -193,6 +195,7 @@
     forEachNeighbor(x, y, (n, nx, ny) => {
       if (!n.revealed && !n.flagged) reveal(nx, ny);
     });
+    renderCursor();
   }
 
   function updateMineCount() {
@@ -242,11 +245,20 @@
     }
   }
 
-  // ----- 커서 (키보드 모드) -----
+  // ----- 커서 + chord 힌트 -----
+  // 커서가 이미 개봉된 셀 위에 있으면, 주변 8칸 중 안 열린 칸을 살짝 밝게 표시
   function renderCursor() {
-    document.querySelectorAll('.cell.cursor').forEach(el => el.classList.remove('cursor'));
+    document.querySelectorAll('.cell.cursor, .cell.chord-hint').forEach(el => {
+      el.classList.remove('cursor', 'chord-hint');
+    });
     const c = cells[cursor.y]?.[cursor.x];
-    if (c) c.el.classList.add('cursor');
+    if (!c) return;
+    c.el.classList.add('cursor');
+    if (c.revealed) {
+      forEachNeighbor(cursor.x, cursor.y, (n) => {
+        if (!n.revealed && !n.flagged) n.el.classList.add('chord-hint');
+      });
+    }
   }
 
   function moveCursor(dx, dy) {
