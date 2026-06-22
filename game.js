@@ -257,6 +257,17 @@
 
   // ----- 이벤트 -----
 
+  // 마우스 호버: 클릭 없이도 커서가 따라옴
+  boardEl.addEventListener('mouseover', (e) => {
+    const target = e.target.closest('.cell');
+    if (!target) return;
+    const x = +target.dataset.x;
+    const y = +target.dataset.y;
+    if (cursor.x === x && cursor.y === y) return;
+    cursor = { x, y };
+    renderCursor();
+  });
+
   // 마우스
   boardEl.addEventListener('mousedown', (e) => {
     const target = e.target.closest('.cell');
