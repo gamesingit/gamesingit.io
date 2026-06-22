@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>지뢰찾기 (Minesweeper)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <h1>지뢰찾기</h1>
+
+    <div class="controls">
+      <label>
+        난이도:
+        <select id="difficulty">
+          <option value="easy">쉬움 (9×9, 지뢰 10)</option>
+          <option value="medium" selected>보통 (16×16, 지뢰 40)</option>
+          <option value="hard">어려움 (30×16, 지뢰 99)</option>
+        </select>
+      </label>
+      <button id="restart">새 게임</button>
+    </div>
+
+    <div class="status">
+      <div class="status-item">💣 <span id="mine-count">0</span></div>
+      <div class="status-item" id="face">🙂</div>
+      <div class="status-item">⏱️ <span id="timer">0</span></div>
+    </div>
+
+    <div id="board" class="board" tabindex="0" aria-label="지뢰찾기 보드"></div>
+
+    <div class="help">
+      <h2>조작법</h2>
+      <ul>
+        <li><b>마우스</b>: 좌클릭 = 열기, 우클릭 = 깃발, 양쪽 동시 클릭 = 주변 열기(코드)</li>
+        <li><b>방향키</b>: 커서 이동</li>
+        <li><b>Z</b>: 열기 (좌클릭)</li>
+        <li><b>C</b>: 깃발 (우클릭)</li>
+        <li><b>X</b>: 주변 열기 (동시 클릭 / chord)</li>
+        <li><b>스페이스 / Enter</b>: 새 게임</li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
