@@ -22,7 +22,16 @@
       <button id="restart">새 게임</button>
       <label class="toggle">
         <input type="checkbox" id="mouse-cursor-only" />
-        마우스는 위치만 (Z/X/C로 조작)
+        마우스는 위치만
+      </label>
+      <label>
+        키:
+        <select id="key-scheme">
+          <option value="zxc" selected>Z / X / C</option>
+          <option value="brackets">[ / ] / \</option>
+          <option value="asd">A / S / D</option>
+          <option value="jkl">J / K / L</option>
+        </select>
       </label>
     </div>
 
@@ -39,9 +48,7 @@
       <ul>
         <li><b>마우스</b>: 좌클릭 = 열기, 우클릭 = 깃발, 양쪽 동시 클릭 = 주변 열기(코드)</li>
         <li><b>방향키</b>: 커서 이동</li>
-        <li><b>Z</b>: 열기 (좌클릭)</li>
-        <li><b>C</b>: 깃발 (우클릭)</li>
-        <li><b>X</b>: 주변 열기 (동시 클릭 / chord)</li>
+        <li><b>액션 키</b> (위 "키" 옵션에서 선택): <span id="key-help">Z=열기, X=주변 열기, C=깃발</span></li>
         <li><b>스페이스 / Enter</b>: 새 게임</li>
         <li>"마우스는 위치만" 옵션을 켜면 마우스 클릭은 커서만 이동하고, 실제 조작은 <b>Z / X / C</b>로만 합니다.</li>
       </ul>

@@ -12,6 +12,24 @@
   const restartBtn = document.getElementById('restart');
   const difficultySel = document.getElementById('difficulty');
   const cursorOnlyChk = document.getElementById('mouse-cursor-only');
+  const keySchemeSel  = document.getElementById('key-scheme');
+  const keyHelpEl     = document.getElementById('key-help');
+
+  // 각 스킴은 [열기, chord, 깃발] 순서의 키. 모두 소문자/심볼 그대로.
+  const KEY_SCHEMES = {
+    zxc:      { reveal: 'z', chord: 'x', flag: 'c', label: 'Z=열기, X=주변 열기, C=깃발' },
+    brackets: { reveal: '[', chord: ']', flag: '\\', label: '[=열기, ]=주변 열기, \\=깃발' },
+    asd:      { reveal: 'a', chord: 's', flag: 'd', label: 'A=열기, S=주변 열기, D=깃발' },
+    jkl:      { reveal: 'j', chord: 'k', flag: 'l', label: 'J=열기, K=주변 열기, L=깃발' },
+  };
+
+  function currentScheme() {
+    return KEY_SCHEMES[keySchemeSel.value] || KEY_SCHEMES.zxc;
+  }
+
+  function updateKeyHelp() {
+    keyHelpEl.textContent = currentScheme().label;
+  }
 
   let cols, rows, totalMines;
   let cells = [];          // 2D array: { mine, revealed, flagged, n, el }
@@ -290,31 +308,36 @@
   // 키보드
   boardEl.addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
+    const scheme = currentScheme();
+    const actionKeys = [scheme.reveal, scheme.chord, scheme.flag];
 
-    if (['arrowup','arrowdown','arrowleft','arrowright','z','x','c',' '].includes(key)) {
+    if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(key) || actionKeys.includes(key)) {
       e.preventDefault();
     }
 
     switch (key) {
-      case 'arrowup':    moveCursor(0, -1); break;
-      case 'arrowdown':  moveCursor(0,  1); break;
-      case 'arrowleft':  moveCursor(-1, 0); break;
-      case 'arrowright': moveCursor( 1, 0); break;
-      case 'z': reveal(cursor.x, cursor.y); break;
-      case 'c': toggleFlag(cursor.x, cursor.y); break;
-      case 'x': chord(cursor.x, cursor.y); break;
+      case 'arrowup':    moveCursor(0, -1); return;
+      case 'arrowdown':  moveCursor(0,  1); return;
+      case 'arrowleft':  moveCursor(-1, 0); return;
+      case 'arrowright': moveCursor( 1, 0); return;
       case ' ':
       case 'enter':
         if (gameOver) init(difficultySel.value);
-        break;
+        return;
     }
+
+    if (key === scheme.reveal) reveal(cursor.x, cursor.y);
+    else if (key === scheme.chord)  chord(cursor.x, cursor.y);
+    else if (key === scheme.flag)   toggleFlag(cursor.x, cursor.y);
   });
 
   // 페이스 클릭 = 새 게임
   faceEl.addEventListener('click', () => init(difficultySel.value));
   restartBtn.addEventListener('click', () => init(difficultySel.value));
   difficultySel.addEventListener('change', () => init(difficultySel.value));
+  keySchemeSel.addEventListener('change', updateKeyHelp);
 
   // 시작
+  updateKeyHelp();
   init(difficultySel.value);
 })();
