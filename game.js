@@ -11,6 +11,7 @@
   const faceEl     = document.getElementById('face');
   const restartBtn = document.getElementById('restart');
   const difficultySel = document.getElementById('difficulty');
+  const cursorOnlyChk = document.getElementById('mouse-cursor-only');
 
   let cols, rows, totalMines;
   let cells = [];          // 2D array: { mine, revealed, flagged, n, el }
@@ -248,6 +249,12 @@
     cursor = { x, y };
     renderCursor();
 
+    // "마우스는 위치만" 모드: 커서만 이동, 어떤 액션도 하지 않음
+    if (cursorOnlyChk.checked) {
+      e.preventDefault();
+      return;
+    }
+
     // 좌+우 동시 (또는 가운데 버튼) → chord
     if ((e.buttons & 3) === 3 || e.button === 1) {
       e.preventDefault();
@@ -264,6 +271,8 @@
     // mouseup 시점에 이전에 양쪽이 눌려 있었으면 chord 처리
     const wasBoth = (mouseButtons & 3) === 3;
     mouseButtons = e.buttons;
+
+    if (cursorOnlyChk.checked) return;
 
     if (wasBoth) {
       // 이미 mousedown에서 chord 처리함
